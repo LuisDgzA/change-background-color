@@ -1,35 +1,50 @@
-const body = document.body;
-function getNumberRandom(max, min){
-    var number = Math.floor(Math.random() * (max - min + 1) );
-    return number;
+const container = document.querySelector('.container');
+
+// if(navigator.mediaDevices.getUserMedia){
+//     navigator.mediaDevices.getUserMedia({
+//         video : true,
+//     }).then(function (stream) {
+//         video.srcObject = stream;
+//     })
+//     .catch(function (error){
+//         console.log("algo esta mal")
+//     })
+// }
+
+const myVideo = document.createElement('video');
+
+myVideo.muted = true;
+
+if(navigator.mediaDevices.getUserMedia){
+    navigator.mediaDevices.getUserMedia({
+        video : true,
+        audio : true,
+    }).then(stream => {
+        myVideo.srcObject = stream;
+        
+
+        myVideo.addEventListener('loadedmetadata', () => {
+            myVideo.play()
+        })
+        container.append(myVideo)
+    })
+    .catch(function (error){
+        console.log("algo esta mal")
+    })
 }
 
-function rgbToHex(r, g ,b){
-    var segment1 = r.toString(16);
-    if(segment1.length == 1){
-        segment1 = "0" + segment1;
-    }
-    var segment2 = g.toString(16);
-    if(segment2.length == 1){
-        segment2 = "0" + segment2;
-    }
-    var segment3 = b.toString(16);
-    if(segment3.length == 1){
-        segment3 = "0" + segment3;
-    }
-    return "#" + segment1 + segment2 + segment3;
-}
-document.addEventListener("click", function(){
-    var red = getNumberRandom(255, 0);
-    var green = getNumberRandom(255, 0);
-    var blue = getNumberRandom(255, 0);
-    const brightness = Math.round(((red * 299) +
-                      (green * 587) +
-                      (blue * 114)) / 1000);
-    const textColor = (brightness > 125) ? 'black' : 'white';
-    var bodyColor = "rgb(" + red + "," + green + "," + blue + ")"; 
-    var colorValue = rgbToHex(red, green, blue);
-    body.style.background = bodyColor;
-    document.querySelector(".container").style.color = textColor;
-    document.getElementById("colorValue").innerHTML = colorValue;
-})
+// navigator.mediaDevices.getUserMedia({
+//     video: true,
+//     audio: true
+// }).then(stream => {
+//     addVideoStream(myVideo, stream)
+// });
+
+
+// function addVideoStream(video, stream){
+//     video.scrObject = stream ;
+//     video.addEventListener('loadedmetadata', () => {
+//         video.play()
+//     })
+//     container.append(video)
+// }
